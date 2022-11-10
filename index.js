@@ -15,10 +15,33 @@
         + It should return a string with `name` and `age`. Example: "Mary, 50"
 */
 
-function Person() {
-
+function Person(name,age) {
+this.name=name;
+this.age=age;
+this.stomach=[];
 }
 
+Person.prototype.eat = function (edible){
+if (this.stomach.length<10) {
+  this.stomach.push(edible);
+}
+}
+
+Person.prototype.poop = function(){
+  this.stomach=[];
+}
+
+Person.prototype.toString = function (){
+  return `${this.name} ${this.age}`;
+}
+
+const mary = new Person('Mary',50);
+
+console.log(mary,toString());
+mary.eat('baklava');
+console.log(mary.stomach);
+mary.poop();
+console.log(mary.stomach);
 
 /*
   TASK 2
@@ -36,9 +59,36 @@ function Person() {
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
 
-function Car() {
-
+function Car(model,mpg) {
+this.model = model;
+this.milesPerGallon = mpg;
+this.tank = 0;
+this.odometer = 0;
 }
+
+Car.prototype.fill = function(gallons){
+  this.tank = this.tank+gallons;
+}
+Car.prototype.drive = function(distance){
+  const driveableMiles=this.tank*this.milesPerGallon;
+  if(distance <= driveableMiles){
+  this.odometer = this.odometer + distance;
+  this.tank=this.tank - (distance/this.milesPerGallon);
+  }
+  else{
+  this.odometer = this.odometer + driveableMiles;
+  this.tank=0;
+  return `I ran out of fuel at ${this.odometer} miles!`;
+  }
+}
+
+const opel = new Car('vectra',40);
+
+console.log('task2', opel.drive(61));
+
+
+
+
 
 
 /*
@@ -49,18 +99,29 @@ function Car() {
         + Should return a string "Playing with x", x being the favorite toy.
 */
 
-function Baby() {
-
+function Baby(name,age,favoriteToy) {
+  Person.call(this,name,age);
+  this.favoriteToy=favoriteToy;
 }
+
+Baby.prototype = Object.create(Person.prototype);
+Baby.prototype.play = function(){
+  return `Playing with ${this.favoriteToy}. `;
+} 
+ const lea = new Baby('Lea',3,'playdough');
+console.log(lea);
+console.log(lea.play());
 
 
 /* 
   TASK 4
   In your own words explain the four principles for the "this" keyword below:
-  1. 
-  2. 
-  3. 
-  4. 
+  1. Global Binidng - when in the global scope the value of 'this' keyword will be the window or console object.
+   It is used when u don’t have a particular context and you re just grabbing things from global context.
+  2. Implicit Binding- whenever an Object is called by e preceding dot, the object left of the dot gets ‘this’.
+  3. Explicit Binding--whenever .call() or .apply() and .bind() method is used 'this' is explicitly defined.
+  4. New Binding - whenever construction function is used, the this keyword refers to a specific instance of an object,
+   that is created and returned by the constructer function.
 */
 
 ///////// END OF CHALLENGE /////////
